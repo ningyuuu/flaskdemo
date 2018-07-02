@@ -4,14 +4,10 @@ import tensorflow as tf
 import model 
 import io
 from PIL import Image
-from shutil import copyfileobj
-from tempfile import NamedTemporaryFile
 
 app = Flask(__name__)
 sess = tf.Session()
 graph = model.load(sess)
-
-print('App init')
 
 @app.route('/tf', methods=['GET', 'POST'])
 def tf():
@@ -38,8 +34,3 @@ def tf():
   response = model.predict(sess, graph, img)
 
   return jsonify(response.tolist()[0])
-
-  # img_io = io.BytesIO()
-  # img.save(img_io, 'PNG', quality=90)
-  # img_io.seek(0)
-  # return send_file(img_io, mimetype='image/png')

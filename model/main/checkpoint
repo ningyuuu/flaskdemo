@@ -1,2 +1,2 @@
-model_checkpoint_path: "/Users/ningzy/code/tensorflow-mnist-tutorial/model/main/model"
-all_model_checkpoint_paths: "/Users/ningzy/code/tensorflow-mnist-tutorial/model/main/model"
+model_checkpoint_path: "/Users/ningzy/code/flaskdemo/model/main/model"
+all_model_checkpoint_paths: "/Users/ningzy/code/flaskdemo/model/main/model"

@@ -49,6 +49,7 @@ def save(sess, path_name='model', model_name='main'):
   saver.save(sess, os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'model'))
 
 def load(sess, path_name='model', model_name='main'):
+  print(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'model.meta'))
   saver = tf.train.import_meta_graph(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'model.meta'))
   saver.restore(sess, tf.train.latest_checkpoint(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name)))
   return tf.get_default_graph()
@@ -61,7 +62,8 @@ def test(sess, graph):
 
 if __name__ == '__main__':
   sess = tf.Session()
-  graph = load(sess)
+  # graph = load(sess)
+  graph = build_graph()
   train(sess, graph)
   print('test', test(sess, graph))
   save(sess)

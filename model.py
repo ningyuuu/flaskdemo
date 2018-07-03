@@ -3,8 +3,6 @@ import math
 import os
 from tensorflow.examples.tutorials.mnist import input_data as mnist_data
 
-mnist = mnist_data.read_data_sets("data", one_hot=True, reshape=False, validation_size=0)
-
 # input X: 28x28 grayscale images, the first dimension (None) will index the images in the mini-batch
 def build_graph():
   x = tf.placeholder(tf.float32, [None, 28, 28, 1], name='x')
@@ -26,7 +24,12 @@ def build_graph():
 def build_better_graph():
   pass
 
+def build_better_better_graph():
+  pass
+
 def train(sess, graph, iters=10000):
+  mnist = mnist_data.read_data_sets("data", one_hot=True, reshape=False, validation_size=0)
+
   x = graph.get_tensor_by_name('x:0')
   y_ = graph.get_tensor_by_name('y_:0')
   train_step = graph.get_operation_by_name('GradientDescent')

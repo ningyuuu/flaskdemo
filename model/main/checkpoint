@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/ningzy/code/flaskdemo/model/main/model"
+all_model_checkpoint_paths: "/Users/ningzy/code/flaskdemo/model/main/model"

@@ -58,6 +58,7 @@ def load(sess, path_name='model', model_name='main'):
   return tf.get_default_graph()
 
 def test(sess, graph):
+  mnist = mnist_data.read_data_sets("data", one_hot=True, reshape=False, validation_size=0)
   x = graph.get_tensor_by_name('x:0')
   y_ = graph.get_tensor_by_name('y_:0')
   accuracy = graph.get_tensor_by_name('accuracy:0')

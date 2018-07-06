@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       value: '',
-      results: '[{"file":"1.png","body":"0","correctAns":0,"result":true}, {"file":"0.png","body":"0","correctAns":0,"result":true}]'
+      results: '[]'
     };
   }
 

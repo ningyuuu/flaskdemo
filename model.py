@@ -7,8 +7,8 @@ from tensorflow.examples.tutorials.mnist import input_data as mnist_data
 def build_graph():
   x = tf.placeholder(tf.float32, [None, 28, 28, 1], name='x')
   y_ = tf.placeholder(tf.float32, [None, 10], name='y_')
-  W = tf.Variable(tf.zeros([784, 10]))
-  b = tf.Variable(tf.zeros([10]))
+  W = tf.Variable(tf.zeros([784, 10]), name='W')
+  b = tf.Variable(tf.zeros([10]), name='b')
   xx = tf.reshape(x, [-1, 784])
   y = tf.nn.softmax(tf.matmul(xx, W) + b)
 
@@ -51,7 +51,28 @@ def save(sess, path_name='model', model_name='main'):
   saver = tf.train.Saver()
   saver.save(sess, os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'model'))
 
+def save_frozen(sess, path_name='model', model_name='main'):
+  # code referenced from: https://blog.metaflow.fr/tensorflow-how-to-freeze-a-model-and-serve-it-with-a-python-api-d4f3596b3adc
+  os.makedirs(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name), exist_ok=True)
+  output_graph_def = tf.graph_util.convert_variables_to_constants(
+    sess,
+    tf.get_default_graph().as_graph_def(),
+    ['classification']
+  )
+  with tf.gfile.GFile(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'frozen_graph.pb'), 'wb') as f:
+    f.write(output_graph_def.SerializeToString())
+    f.close()
+  print('Frozen graph saved.')
+
 def load(sess, path_name='model', model_name='main'):
+  with tf.gfile.GFile(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'frozen_graph.pb'), "rb") as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
+
+  tf.import_graph_def(graph_def, name="")
+  return tf.get_default_graph()
+
+def load_checkpoint(sess, path_name='model', model_name='main'):
   print(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'model.meta'))
   saver = tf.train.import_meta_graph(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name, 'model.meta'))
   saver.restore(sess, tf.train.latest_checkpoint(os.path.join(os.path.dirname(os.path.realpath(__file__)), path_name, model_name)))
@@ -70,4 +91,4 @@ if __name__ == '__main__':
   graph = build_graph()
   train(sess, graph)
   print('test', test(sess, graph))
-  save(sess)
+  save_frozen(sess)
